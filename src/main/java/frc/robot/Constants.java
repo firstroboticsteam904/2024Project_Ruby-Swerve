@@ -4,6 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -13,7 +22,65 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+  public static final class CANDevices {
+    public static final int frontLeftDriveMotorID = 1;
+    public static final int frontLeftRotationMotorID = 2;
+    public static final int frontLeftAbsoluteEncoder = 3;
+
+    public static final int frontRightDriveMotorID = 4;
+    public static final int frontRightRotationMotorID = 5;
+    public static final int frontRightAbsoluteEncoder = 6;
+
+    public static final int backLeftDriveMotorID = 7;
+    public static final int backLeftRotationMotorID = 8;
+    public static final int backLeftAbsoluteEncoder = 9;
+
+    public static final int backRightDriveMotorID = 10;
+    public static final int backRightRotationMotorID = 11;
+    public static final int backRightAbsoluteEncoder = 12;
+
+    public static final int pigeonID = 26;
   }
+
+  public static final class DriveConstants {
+    public static final double trackWidth = Units.inchesToMeters(28.25);
+    public static final double wheelBase = Units.inchesToMeters(28.25);
+
+    public static final SwerveDriveKinematics kinematics = 
+      new SwerveDriveKinematics(
+        new Translation2d(trackWidth / 2.0, wheelBase / 2.0), //front left
+        new Translation2d(trackWidth / 2.0, -wheelBase / 2.0), //front right
+        new Translation2d(-trackWidth / 2.0, wheelBase / 2.0), //back left
+        new Translation2d(-trackWidth / 2.0, -wheelBase / 2.0) //back right
+      );
+
+    public static final double driveWheelGearReduction = 6.75;
+    public static final double rotationWheelGearReduction = 21.43;
+
+    public static final double wheelDiameterMeters = Units.inchesToMeters(4);
+
+    public static final double rotationMotorMaxSpeedRadPerSec = 1.0;
+    public static final double rotationMotorMaxAccelRadPerSec = 1.0;
+
+    public static final SimpleMotorFeedforward driveFF = 
+    new SimpleMotorFeedforward(0.254, 0.137);
+
+    public static final double maxDriveSpeedMetersPerSec = Units.feetToMeters(15.1);
+    public static final double teleopTurnRateDegPerSec = 360.0;
+
+
+  }
+
+  public static final class AutoConstants {
+
+    public static final double maxVelMetersPerSec = 2;
+    public static final double maxAccelMetersPerSec = 1;
+
+  }
+
+  public static final class OperatorConstants{
+
+    public static final double Deadzone = 0.095;
+  }
+
 }
