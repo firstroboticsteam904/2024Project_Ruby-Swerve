@@ -16,20 +16,20 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class TeleopDrive extends Command {
 
-  private final DriveSubsystem swerveDrivetrain;
+  private final DriveSubsystem swerveDrive;
   private final Supplier<Double> xSpeedFunc, ySpeedFunc, rotationFunc;
   private final Supplier<Boolean> fieldOrientedFunc;
   private final SlewRateLimiter xRateLimiter, yRateLimiter, rotationRateLimiter;
 
   /** Creates a new TeleopDrive. */
-  public TeleopDrive(DriveSubsystem swerveDrivetrain, Supplier<Double> xSpeedFunc,
-  Supplier<Double> ySpeedFunc, Supplier<Double> rotationFunc, Supplier<Boolean> fieldOrientedFun) {
+  public TeleopDrive(DriveSubsystem swerveDrivetrain, Supplier<Double> xSpeed,
+  Supplier<Double> ySpeed, Supplier<Double> rotationSpeed, Supplier<Boolean> fieldOriented) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.swerveDrivetrain = swerveDrivetrain;
-    this.xSpeedFunc = xSpeedFunc;
-    this.ySpeedFunc = ySpeedFunc;
-    this.rotationFunc = rotationFunc;
-    this.fieldOrientedFunc = fieldOrientedFun;
+    swerveDrive = swerveDrivetrain;
+    xSpeedFunc = xSpeed;
+    ySpeedFunc = ySpeed;
+    rotationFunc = rotationSpeed;
+    fieldOrientedFunc = fieldOriented;
     this.xRateLimiter = new SlewRateLimiter(3);
     this.yRateLimiter = new SlewRateLimiter(3);
     this.rotationRateLimiter = new SlewRateLimiter(3);
@@ -43,24 +43,33 @@ public class TeleopDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double xSpeed = xSpeedFunc.get();
-    double ySpeed = ySpeedFunc.get();
-    double rotationSpeed = rotationFunc.get();
+    
+    double ForwardX = xSpeedFunc.get();
+    ForwardX = Math.copySign(ForwardX, ForwardX);
+    ForwardX = deadzoneInputs(ForwardX) * DriveConstants.maxDriveSpeedMetersPerSec;
 
-    xSpeed = Math.abs(xSpeed) > OperatorConstants.Deadzone ? xSpeed : 0.0;
-    ySpeed = Math.abs(ySpeed) > OperatorConstants.Deadzone ? ySpeed : 0.0;
-    rotationSpeed = Math.abs(rotationSpeed) > OperatorConstants.Deadzone ? rotationSpeed : 0.0;
+    double StrafeY = ySpeedFunc.get();
+    StrafeY = Math.copySign(StrafeY, StrafeY);
+    StrafeY = deadzoneInputs(StrafeY) * DriveConstants.maxDriveSpeedMetersPerSec;
 
-    xSpeed = xRateLimiter.calculate(xSpeed) * DriveConstants.maxDriveSpeedMetersPerSec;
-    ySpeed = yRateLimiter.calculate(ySpeed) * DriveConstants.maxDriveSpeedMetersPerSec;
-    rotationSpeed = rotationRateLimiter.calculate(rotationSpeed) * DriveConstants.teleopTurnRateDegPerSec;
+    double rotationZ = rotationFunc.get();
+    rotationZ = Math.copySign(rotationZ * rotationZ, rotationZ);
+    rotationZ = deadzoneInputs(rotationZ) * DriveConstants.rotationMotorMaxSpeedRadPerSec;
 
-    swerveDrivetrain.drive(
-      xSpeed, 
-      ySpeed, 
-      rotationSpeed, 
+    swerveDrive.drive(
+      -ForwardX, 
+      -StrafeY, 
+      -rotationZ, 
       fieldOrientedFunc.get());
 
+
+  }
+
+  public double deadzoneInputs(double input) {
+    if (Math.abs(input) < 0.095 ) {
+      return 0.0;
+    }
+    return input;
   }
 
   // Called once the command ends or is interrupted.

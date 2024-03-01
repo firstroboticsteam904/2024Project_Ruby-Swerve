@@ -12,6 +12,8 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
@@ -19,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
 public class SwerveModule extends SubsystemBase {
-  private static final double rotationkP = 1;
-  private static final double rotationkD = 0.5;
+  private static final double rotationkP = 0.1;
+  private static final double rotationkD = 0.01;
 
   private static final double drivekP = 0.01;
 
@@ -34,7 +36,8 @@ public class SwerveModule extends SubsystemBase {
 
   private final Rotation2d offset;
 
-  private final SparkPIDController rotationController;
+  private final PIDController rotationPID;
+  //private final SparkPIDController rotationController;
   private final SparkPIDController driveController;
 
   /** Creates a new SwerveModule. */
@@ -57,11 +60,15 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.setIdleMode(IdleMode.kBrake);
     rotationMotor.setIdleMode(IdleMode.kCoast);
 
-    rotationController = rotationMotor.getPIDController();
+    //rotationController = rotationMotor.getPIDController();
     driveController = driveMotor.getPIDController();
+    
 
-    rotationController.setP(rotationkP);
-    rotationController.setD(rotationkD);
+    //rotationController.setP(rotationkP);
+    //rotationController.setD(rotationkD);
+
+    rotationPID = new PIDController(0.5, 0, 0.01);
+    rotationPID.enableContinuousInput(-Math.PI, Math.PI);
 
     driveController.setP(drivekP);
 
@@ -142,12 +149,14 @@ public class SwerveModule extends SubsystemBase {
   public void setDesiredStateClosedLoop(SwerveModuleState desiredState){
 
     SwerveModuleState state = desiredState;
-    rotationController.setReference(
+    /*rotationController.setReference(
       calculateAdjustedAngle(
         state.angle.getRadians(),
         rotationEncoder.getPosition()), 
       ControlType.kPosition
-    );
+    );*/
+
+    rotationMotor.set(rotationPID.calculate(getRelativeEncoderAngle().getRadians(), state.angle.getRadians()));
 
     double speedRadPerSec = desiredState.speedMetersPerSecond / (DriveConstants.wheelDiameterMeters / 2);
 
