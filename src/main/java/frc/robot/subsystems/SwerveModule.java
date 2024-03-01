@@ -156,7 +156,7 @@ public class SwerveModule extends SubsystemBase {
       ControlType.kPosition
     );*/
 
-    rotationMotor.set(rotationPID.calculate(getRelativeEncoderAngle().getRadians(), state.angle.getRadians()));
+    rotationMotor.set(rotationPID.calculate(getRelativeEncoderAngle().getRadians(), -state.angle.getRadians()));
 
     double speedRadPerSec = desiredState.speedMetersPerSecond / (DriveConstants.wheelDiameterMeters / 2);
 

@@ -59,7 +59,7 @@ public class TeleopDrive extends Command {
     swerveDrive.drive(
       -ForwardX, 
       -StrafeY, 
-      -rotationZ, 
+      rotationZ, 
       fieldOrientedFunc.get());
 
 
