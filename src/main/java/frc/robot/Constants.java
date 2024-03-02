@@ -44,7 +44,7 @@ public final class Constants {
 
   public static final class DriveConstants {
     //length from left to right
-    public static final double trackWidth = Units.inchesToMeters(28.25);
+    public static final double trackWidth = Units.inchesToMeters(27.50);
     //length from front to back
     public static final double wheelBase = Units.inchesToMeters(28.25);
 
