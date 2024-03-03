@@ -45,6 +45,10 @@ public final class Constants {
     public static final int backRightRotationMotorID = 11;
     public static final int backRightAbsoluteEncoder = 12;
 
+    public static final int ShootMotor1 = 13;
+    public static final int ShootMotor2 = 14;
+    public static final int RotationMotor = 15;
+
     public static final int pigeonID = 26;
   }
 

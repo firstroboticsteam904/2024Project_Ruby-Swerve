@@ -5,17 +5,12 @@
 package frc.robot;
 
 import frc.robot.commands.Teleop.TeleopDrive;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve.DriveSubsystem;
-
-import java.sql.Driver;
-
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -43,12 +38,9 @@ public class RobotContainer {
 
 
 
-
     // Configure the trigger bindings
-    configureBindings(
+    configureBindings();
 
-
-      );
   }
 
   /**
@@ -61,6 +53,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
 
   }
 

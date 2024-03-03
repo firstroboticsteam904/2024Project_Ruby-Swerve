@@ -4,9 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -15,6 +17,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+
+    public static Shooter shooter; 
+
+      public Joystick OperatorStick;
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -28,6 +35,11 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    shooter = new Shooter();
+
+    OperatorStick = new Joystick(1);
+
   }
 
   /**
@@ -81,7 +93,24 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    if (OperatorStick.getRawButton(6)) {
+      shooter.shooterSpeed(-1.0);
+    } else if(OperatorStick.getRawButton(5)) {
+      shooter.shooterSpeed(0.25);
+    } else{
+      shooter.shooterSpeed(0);
+    }
+    
+    if (OperatorStick.getRawAxis(3) > 0.45) {
+      shooter.rotatorSpeed(0.20);
+    } else if(OperatorStick.getRawAxis(2) >  0.45){
+      shooter.rotatorSpeed(-0.20);
+    }
+      else {
+      shooter.rotatorSpeed(0.0);
+    }
+  }
   
 
   @Override
