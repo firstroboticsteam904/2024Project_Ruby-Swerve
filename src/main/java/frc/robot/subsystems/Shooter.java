@@ -26,8 +26,8 @@ public class Shooter extends SubsystemBase {
   }
 
    public void shooterSpeed(double shootSpeed){
-    slayShooter1.set(-shootSpeed);
-    slayShooter2.set(shootSpeed);
+    slayShooter1.set(shootSpeed);
+    slayShooter2.set(-shootSpeed);
   }
 
   public void rotatorSpeed(double rotateSpeed){

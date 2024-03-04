@@ -94,6 +94,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+
     if (OperatorStick.getRawButton(6)) {
       shooter.shooterSpeed(-1.0);
     } else if(OperatorStick.getRawButton(5)) {
@@ -110,6 +111,7 @@ public class Robot extends TimedRobot {
       else {
       shooter.rotatorSpeed(0.0);
     }
+    
   }
   
 
