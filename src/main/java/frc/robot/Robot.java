@@ -34,11 +34,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    OperatorStick = new Joystick(2);
     m_robotContainer = new RobotContainer();
-
-    shooter = new Shooter();
-
-    OperatorStick = new Joystick(1);
 
   }
 
@@ -94,22 +91,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    if (OperatorStick.getRawButton(6)) {
-      shooter.shooterSpeed(-1.0);
-    } else if(OperatorStick.getRawButton(5)) {
-      shooter.shooterSpeed(0.25);
-    } else{
-      shooter.shooterSpeed(0);
-    }
-    
-    if (OperatorStick.getRawAxis(3) > 0.45) {
-      shooter.rotatorSpeed(0.20);
-    } else if(OperatorStick.getRawAxis(2) >  0.45){
-      shooter.rotatorSpeed(-0.20);
-    }
-      else {
-      shooter.rotatorSpeed(0.0);
-    }
+
   }
   
 

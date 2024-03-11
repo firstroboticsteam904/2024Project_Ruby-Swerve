@@ -23,16 +23,18 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter. */
   public Shooter() {
+    slayShooter1.setInverted(true);
   }
 
    public void shooterSpeed(double shootSpeed){
-    slayShooter1.set(-shootSpeed);
+    slayShooter1.set(shootSpeed);
     slayShooter2.set(shootSpeed);
   }
 
   public void rotatorSpeed(double rotateSpeed){
     noteRotator.set(rotateSpeed);
   }
+
 
   @Override
   public void periodic() {

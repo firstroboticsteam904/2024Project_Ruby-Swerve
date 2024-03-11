@@ -4,11 +4,18 @@
 
 package frc.robot;
 
+import frc.robot.commands.Teleop.ShooterCmdGroupTest;
 import frc.robot.commands.Teleop.TeleopDrive;
+import frc.robot.commands.Teleop.TeleopIntake;
+import frc.robot.commands.Teleop.TeleopShoot;
+import frc.robot.commands.Teleop.TeleopStop;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 
@@ -21,8 +28,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem swerve = new DriveSubsystem();
+  private final Shooter shoot = new Shooter();
 
   private final CommandXboxController DriverController = new CommandXboxController(0);
+  private final CommandGenericHID OperatorController = new CommandGenericHID(1);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -35,7 +44,6 @@ public class RobotContainer {
       () -> -DriverController.getRightX(), 
       () -> false)
     );
-
 
 
     // Configure the trigger bindings
@@ -54,6 +62,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
+   OperatorController.button(1).whileTrue(new ShooterCmdGroupTest(shoot));
+
+    //OperatorController.button(2).whileTrue(new TeleopIntake(shoot));
 
   }
 

@@ -6,7 +6,6 @@ package frc.robot.subsystems.Swerve;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
-import edu.wpi.first.hal.CANAPITypes.CANDeviceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
