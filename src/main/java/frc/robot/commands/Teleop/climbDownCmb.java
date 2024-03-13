@@ -4,30 +4,27 @@
 
 package frc.robot.commands.Teleop;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.Robot;
 
-public class TeleopIntake extends Command {
-
-  private final Shooter shoot;
-
-  /** Creates a new TeleopIntake. */
-  public TeleopIntake(Shooter shoot) {
-    this.shoot = shoot;
+public class climbDownCmb extends Command {
+  /** Creates a new climbDownCmb. */
+  public climbDownCmb() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+     Robot.melanieClimber.set(Value.kReverse);
+    System.out.println("Climer Down");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shoot.shooterSpeed(0.25);
-    System.out.println("Shooter now Intaking");
+
   }
 
   // Called once the command ends or is interrupted.
@@ -37,6 +34,6 @@ public class TeleopIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

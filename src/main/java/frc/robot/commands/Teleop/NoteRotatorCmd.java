@@ -7,27 +7,23 @@ package frc.robot.commands.Teleop;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
-public class TeleopIntake extends Command {
-
-  private final Shooter shoot;
-
-  /** Creates a new TeleopIntake. */
-  public TeleopIntake(Shooter shoot) {
-    this.shoot = shoot;
+public class NoteRotatorCmd extends Command {
+  private final Shooter shooter;
+  /** Creates a new NoteRotatorCmd. */
+  public NoteRotatorCmd(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.shooter = shooter;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shoot.shooterSpeed(0.25);
-    System.out.println("Shooter now Intaking");
+    shooter.rotatorSpeed(.20);
+    System.out.println("Rotator Spinning");
   }
 
   // Called once the command ends or is interrupted.
