@@ -11,19 +11,19 @@ import frc.robot.subsystems.Shooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class IntakeCmdGroup extends SequentialCommandGroup {
+public class IntakeRestCmdGroup extends SequentialCommandGroup {
 private final Shooter shooter;
   /** Creates a new IntakeCmdGroup. */
-  public IntakeCmdGroup(Shooter shooter) {
+  public IntakeRestCmdGroup(Shooter shooter) {
     this.shooter=shooter;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new IntakeFlipperCmd(),
+    new intakeRestPosCmd(),
     new WaitCommand(0.4),
-    new shootAngleCmd(),
+    new shootRestAngleCmd(),
     new WaitCommand(1),
-    new TeleopIntake(shooter)
+    new TeleopStop(shooter)
     );
   }
 }

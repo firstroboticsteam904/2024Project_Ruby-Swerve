@@ -5,27 +5,18 @@
 package frc.robot;
 
 import frc.robot.commands.Teleop.IntakeCmdGroup;
+import frc.robot.commands.Teleop.IntakeRestCmdGroup;
 import frc.robot.commands.Teleop.NoteRotatorCmd;
-import frc.robot.commands.Teleop.ShooterCmdGroupTest;
 import frc.robot.commands.Teleop.ShootingCmdGroup;
+import frc.robot.commands.Teleop.ShootingCmdRestGroup;
 import frc.robot.commands.Teleop.TeleopDrive;
-import frc.robot.commands.Teleop.TeleopIntake;
-import frc.robot.commands.Teleop.TeleopShoot;
-import frc.robot.commands.Teleop.TeleopStop;
 import frc.robot.commands.Teleop.climbDownCmb;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve.DriveSubsystem;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Robot;
 import frc.robot.commands.Teleop.climbcommand;
 import frc.robot.commands.Teleop.intakeRestPosCmd;
-import frc.robot.commands.Teleop.shootAngleCmd;
 import frc.robot.commands.Teleop.shootRestAngleCmd;
 
 
@@ -39,7 +30,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem swerve = new DriveSubsystem();
   private final Shooter shoot = new Shooter();
-  private final Robot robot = new Robot();
 
   public final CommandXboxController DriverController = new CommandXboxController(0);
   private final CommandGenericHID OperatorController = new CommandGenericHID(1);
@@ -53,7 +43,7 @@ public class RobotContainer {
       () -> DriverController.getLeftY(), 
       () -> DriverController.getLeftX(), 
       () -> -DriverController.getRightX(), 
-      () -> false)
+      () -> true)
     );
 
 
@@ -79,9 +69,9 @@ public class RobotContainer {
    OperatorController.axisGreaterThan(3, 0.45).whileTrue(new IntakeCmdGroup(shoot));
    OperatorController.button(5).whileTrue(new NoteRotatorCmd(shoot));
 
-   OperatorController.button(6).whileFalse(new shootRestAngleCmd());
-   OperatorController.axisLessThan(2, 0.44).whileTrue(new intakeRestPosCmd());
-   OperatorController.axisLessThan(3, 0.44).whileTrue(new intakeRestPosCmd());
+   OperatorController.button(6).whileFalse(new ShootingCmdRestGroup(shoot));
+   OperatorController.axisGreaterThan(2, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
+   OperatorController.axisGreaterThan(3, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
 
     //OperatorController.button(2).whileTrue(new TeleopIntake(shoot));
 

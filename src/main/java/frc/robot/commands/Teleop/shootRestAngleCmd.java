@@ -17,13 +17,15 @@ public class shootRestAngleCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Robot.shootAndkilltheangle.set(Value.kReverse);
-    System.out.println("Shoot Angle Rest");
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    Robot.shootAndkilltheangle.set(Value.kReverse);
+    System.out.println("Shoot Angle Rest");
+  }
 
   // Called once the command ends or is interrupted.
   @Override

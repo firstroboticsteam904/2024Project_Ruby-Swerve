@@ -22,7 +22,7 @@ public class TeleopShoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    isFinishedTimer.reset();
+    //isFinishedTimer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -30,7 +30,7 @@ public class TeleopShoot extends Command {
   public void execute() {
     shooter.shooterSpeed(1.0);
     System.out.println("Robot now shooting");
-    isFinishedTimer.start();
+    //isFinishedTimer.start();
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +40,7 @@ public class TeleopShoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isFinishedTimer.get() >= 3;
+    return false;
+    //return isFinishedTimer.get() >= 3;
   }
 }

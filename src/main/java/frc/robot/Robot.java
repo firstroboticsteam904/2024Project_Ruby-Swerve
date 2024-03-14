@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,8 +34,8 @@ public class Robot extends TimedRobot {
    public static Compressor vaselineCompressor = new Compressor(PneumaticsModuleType.REVPH); 
    public static  PneumaticHub taylorSwiftPneumaticHub = new PneumaticHub(35);
 
-  public static  DoubleSolenoid melanieClimber = taylorSwiftPneumaticHub.makeDoubleSolenoid(1, 14);
-  public static DoubleSolenoid shootAndkilltheangle = taylorSwiftPneumaticHub.makeDoubleSolenoid(0, 15);
+  public static  DoubleSolenoid melanieClimber = taylorSwiftPneumaticHub.makeDoubleSolenoid(0, 15);
+  public static DoubleSolenoid shootAndkilltheangle = taylorSwiftPneumaticHub.makeDoubleSolenoid(14, 1);
   public static DoubleSolenoid intakeFlipperthingy = taylorSwiftPneumaticHub.makeDoubleSolenoid(2, 13);
 
 
@@ -114,7 +113,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
- 
   
 
   }
