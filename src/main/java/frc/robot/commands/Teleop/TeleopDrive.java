@@ -10,6 +10,8 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -63,6 +65,12 @@ public class TeleopDrive extends Command {
       -StrafeY, 
       rotationZ, 
       fieldOrientedFunc.get());
+
+    if(fieldOrientedFunc.get() == true){
+      System.out.println("Field Oriented");
+    } else {
+      System.out.println("Robot Oriented");
+    }
 
 
   }

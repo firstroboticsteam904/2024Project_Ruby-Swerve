@@ -4,20 +4,22 @@
 
 package frc.robot;
 
-import frc.robot.commands.Teleop.IntakeCmdGroup;
-import frc.robot.commands.Teleop.IntakeRestCmdGroup;
-import frc.robot.commands.Teleop.NoteRotatorCmd;
-import frc.robot.commands.Teleop.ShootingCmdGroup;
-import frc.robot.commands.Teleop.ShootingCmdRestGroup;
 import frc.robot.commands.Teleop.TeleopDrive;
-import frc.robot.commands.Teleop.climbDownCmb;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve.DriveSubsystem;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.Teleop.climbcommand;
-import frc.robot.commands.Teleop.intakeRestPosCmd;
-import frc.robot.commands.Teleop.shootRestAngleCmd;
+import frc.robot.commands.Teleop.resetPigeon;
+import frc.robot.commands.Teleop.Climb.climbDownCmb;
+import frc.robot.commands.Teleop.Climb.climbcommand;
+import frc.robot.commands.Teleop.Intake.IntakeCmdGroup;
+import frc.robot.commands.Teleop.Intake.IntakeRestCmdGroup;
+import frc.robot.commands.Teleop.Intake.intakeRestPosCmd;
+import frc.robot.commands.Teleop.Shooter.NoteRotatorCmd;
+import frc.robot.commands.Teleop.Shooter.ShootingCmdGroup;
+import frc.robot.commands.Teleop.Shooter.ShootingCmdRestGroup;
+import frc.robot.commands.Teleop.Shooter.shootRestAngleCmd;
 
 
 /**
@@ -43,7 +45,7 @@ public class RobotContainer {
       () -> DriverController.getLeftY(), 
       () -> DriverController.getLeftX(), 
       () -> -DriverController.getRightX(), 
-      () -> true)
+      () -> !DriverController.leftTrigger().getAsBoolean())
     );
 
 
@@ -77,6 +79,7 @@ public class RobotContainer {
 
     DriverController.a().onTrue(new climbcommand());
     DriverController.b().onTrue(new climbDownCmb());
+    DriverController.x().onTrue(new resetPigeon(swerve));
 
 
   }

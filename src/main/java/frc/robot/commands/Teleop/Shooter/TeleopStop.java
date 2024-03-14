@@ -2,17 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Teleop;
+package frc.robot.commands.Teleop.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
-public class NoteRotatorCmd extends Command {
+public class TeleopStop extends Command {
   private final Shooter shooter;
-  /** Creates a new NoteRotatorCmd. */
-  public NoteRotatorCmd(Shooter shooter) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  /** Creates a new TeleopStop. */
+  public TeleopStop(Shooter shooter) {
     this.shooter = shooter;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -22,8 +23,9 @@ public class NoteRotatorCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.rotatorSpeed(.20);
-    System.out.println("Rotator Spinning");
+    shooter.shooterSpeed(0.0);
+    shooter.rotatorSpeed(0.0);
+    System.out.println("Shooter now Stopped");
   }
 
   // Called once the command ends or is interrupted.

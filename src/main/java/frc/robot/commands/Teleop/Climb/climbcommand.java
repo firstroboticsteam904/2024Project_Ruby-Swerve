@@ -1,4 +1,4 @@
-package frc.robot.commands.Teleop;
+package frc.robot.commands.Teleop.Climb;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;

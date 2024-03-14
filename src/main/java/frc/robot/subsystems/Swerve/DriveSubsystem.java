@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.Swerve;
 
+import java.util.logging.Logger;
+
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,6 +16,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANDevices;
@@ -89,6 +94,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
+
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -97,6 +104,8 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("heading", getHeading().getDegrees());
     SmartDashboard.putNumber("Odometry X", odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("Odometry Y", odometry.getPoseMeters().getY());
+
+
 
   }
 
@@ -154,6 +163,7 @@ public class DriveSubsystem extends SubsystemBase {
   return positions;
 
 }
+
 
 
   public Pose2d getPose() {
@@ -223,5 +233,6 @@ public class DriveSubsystem extends SubsystemBase {
     pigeon.setYaw(0);
 
   }
+
 
 }

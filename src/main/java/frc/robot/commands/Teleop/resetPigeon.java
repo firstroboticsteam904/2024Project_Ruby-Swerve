@@ -4,27 +4,26 @@
 
 package frc.robot.commands.Teleop;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
+import frc.robot.subsystems.Swerve.DriveSubsystem;
 
-public class climbDownCmb extends Command {
-  /** Creates a new climbDownCmb. */
-  public climbDownCmb() {
+public class resetPigeon extends Command {
+  private final DriveSubsystem driveSubsystem;
+  /** Creates a new resetPigeon. */
+  public resetPigeon(DriveSubsystem driveSubsystem) {
+    this.driveSubsystem = driveSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-     Robot.melanieClimber.set(Value.kReverse);
-    System.out.println("Climer Down");
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    driveSubsystem.resetPigeon();
+    System.out.println("Pigeon Reset");
   }
 
   // Called once the command ends or is interrupted.

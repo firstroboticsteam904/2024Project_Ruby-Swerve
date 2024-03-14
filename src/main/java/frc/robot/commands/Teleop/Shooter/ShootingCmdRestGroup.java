@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Teleop;
+package frc.robot.commands.Teleop.Shooter;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -11,19 +11,16 @@ import frc.robot.subsystems.Shooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class IntakeCmdGroup extends SequentialCommandGroup {
-private final Shooter shooter;
-  /** Creates a new IntakeCmdGroup. */
-  public IntakeCmdGroup(Shooter shooter) {
-    this.shooter=shooter;
+public class ShootingCmdRestGroup extends SequentialCommandGroup {
+  private final Shooter shooter;
+  /** Creates a new ShootingCmdGroup. */
+  public ShootingCmdRestGroup(Shooter shooter) {
+    this.shooter = shooter;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-    new IntakeFlipperCmd(),
-    new WaitCommand(0.4),
-    new shootAngleCmd(),
-    new WaitCommand(1),
-    new TeleopIntake(shooter)
+      addCommands(
+    new shootRestAngleCmd(),
+    new TeleopStop(shooter)
     );
   }
 }

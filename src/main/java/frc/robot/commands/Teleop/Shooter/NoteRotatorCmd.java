@@ -2,29 +2,28 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Teleop;
+package frc.robot.commands.Teleop.Shooter;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
+import frc.robot.subsystems.Shooter;
 
-public class shootRestAngleCmd extends Command {
-  /** Creates a new shootRestAngleCmd. */
-  public shootRestAngleCmd() {
+public class NoteRotatorCmd extends Command {
+  private final Shooter shooter;
+  /** Creates a new NoteRotatorCmd. */
+  public NoteRotatorCmd(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.shooter = shooter;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Robot.shootAndkilltheangle.set(Value.kReverse);
-    System.out.println("Shoot Angle Rest");
+    shooter.rotatorSpeed(.20);
+    System.out.println("Rotator Spinning");
   }
 
   // Called once the command ends or is interrupted.
@@ -34,6 +33,6 @@ public class shootRestAngleCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
