@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Teleop;
+package frc.robot.commands.Teleop.Drive;
 
 import java.lang.module.ModuleDescriptor.Requires;
 import java.util.function.Supplier;
@@ -50,15 +50,15 @@ public class TeleopDrive extends Command {
     
     double ForwardX = xSpeedFunc.get();
     ForwardX = Math.copySign(ForwardX, ForwardX);
-    ForwardX = deadzoneInputs(ForwardX) * DriveConstants.maxDriveSpeedMetersPerSec;
+    ForwardX = xRateLimiter.calculate(ForwardX) * DriveConstants.maxDriveSpeedMetersPerSec;
 
     double StrafeY = ySpeedFunc.get();
     StrafeY = Math.copySign(StrafeY, StrafeY);
-    StrafeY = deadzoneInputs(StrafeY) * DriveConstants.maxDriveSpeedMetersPerSec;
+    StrafeY = yRateLimiter.calculate(StrafeY) * DriveConstants.maxDriveSpeedMetersPerSec;
 
     double rotationZ = rotationFunc.get();
     rotationZ = Math.copySign(rotationZ * rotationZ, rotationZ);
-    rotationZ = deadzoneInputs(rotationZ) * DriveConstants.rotationMotorMaxSpeedRadPerSec;
+    rotationZ = rotationRateLimiter.calculate(rotationZ) * DriveConstants.rotationMotorMaxSpeedRadPerSec;
 
     swerveDrive.drive(
       -ForwardX, 

@@ -2,28 +2,35 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Teleop;
+package frc.robot.commands.Teleop.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Swerve.DriveSubsystem;
+import frc.robot.subsystems.Shooter;
 
-public class resetPigeon extends Command {
-  private final DriveSubsystem driveSubsystem;
-  /** Creates a new resetPigeon. */
-  public resetPigeon(DriveSubsystem driveSubsystem) {
-    this.driveSubsystem = driveSubsystem;
+public class TeleopShoot extends Command {
+
+  private final Shooter shooter;
+  Timer isFinishedTimer = new Timer();
+
+  /** Creates a new TeleopShoot. */
+  public TeleopShoot(Shooter shooter) {
+    this.shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    //isFinishedTimer.reset();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSubsystem.resetPigeon();
-    System.out.println("Pigeon Reset");
+    shooter.shooterSpeed(1.0);
+    System.out.println("Robot now shooting");
+    //isFinishedTimer.start();
   }
 
   // Called once the command ends or is interrupted.
@@ -33,6 +40,7 @@ public class resetPigeon extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
+    //return isFinishedTimer.get() >= 3;
   }
 }

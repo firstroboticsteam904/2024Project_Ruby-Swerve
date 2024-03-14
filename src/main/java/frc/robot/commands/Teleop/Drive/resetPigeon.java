@@ -2,32 +2,28 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Teleop;
+package frc.robot.commands.Teleop.Drive;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve.DriveSubsystem;
 
-public class TeleopIntake extends Command {
-
-  private final Shooter shoot;
-
-  /** Creates a new TeleopIntake. */
-  public TeleopIntake(Shooter shoot) {
-    this.shoot = shoot;
+public class resetPigeon extends Command {
+  private final DriveSubsystem driveSubsystem;
+  /** Creates a new resetPigeon. */
+  public resetPigeon(DriveSubsystem driveSubsystem) {
+    this.driveSubsystem = driveSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shoot.shooterSpeed(0.25);
-    System.out.println("Shooter now Intaking");
+    driveSubsystem.resetPigeon();
+    System.out.println("Pigeon Reset");
   }
 
   // Called once the command ends or is interrupted.
@@ -37,6 +33,6 @@ public class TeleopIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
