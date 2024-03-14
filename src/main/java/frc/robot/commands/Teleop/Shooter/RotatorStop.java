@@ -7,13 +7,12 @@ package frc.robot.commands.Teleop.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
-public class TeleopStop extends Command {
+public class RotatorStop extends Command {
   private final Shooter shooter;
-  /** Creates a new TeleopStop. */
-  public TeleopStop(Shooter shooter) {
-    this.shooter = shooter;
+  /** Creates a new RotatorStop. */
+  public RotatorStop(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    this.shooter = shooter;
   }
 
   // Called when the command is initially scheduled.
@@ -23,8 +22,7 @@ public class TeleopStop extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shooterSpeed(0.0);
-    System.out.println("Shooter now Stopped");
+    shooter.rotatorSpeed(0.0);
   }
 
   // Called once the command ends or is interrupted.
@@ -34,6 +32,6 @@ public class TeleopStop extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

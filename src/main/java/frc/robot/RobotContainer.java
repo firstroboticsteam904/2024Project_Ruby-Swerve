@@ -18,6 +18,7 @@ import frc.robot.commands.Teleop.Intake.IntakeCmdGroup;
 import frc.robot.commands.Teleop.Intake.IntakeRestCmdGroup;
 import frc.robot.commands.Teleop.Intake.intakeRestPosCmd;
 import frc.robot.commands.Teleop.Shooter.NoteRotatorCmd;
+import frc.robot.commands.Teleop.Shooter.RotatorStop;
 import frc.robot.commands.Teleop.Shooter.ShootingCmdGroup;
 import frc.robot.commands.Teleop.Shooter.ShootingCmdRestGroup;
 import frc.robot.commands.Teleop.Shooter.shootRestAngleCmd;
@@ -75,6 +76,7 @@ public class RobotContainer {
    OperatorController.button(6).whileFalse(new ShootingCmdRestGroup(shoot));
    OperatorController.axisGreaterThan(2, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
    OperatorController.axisGreaterThan(3, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
+   OperatorController.button(5).whileFalse(new RotatorStop(shoot));
 
     //OperatorController.button(2).whileTrue(new TeleopIntake(shoot));
 
