@@ -2,46 +2,41 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Teleop.Shooter;
+package frc.robot.commands.Auto.Shooter;
 
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.Robot;
 
-public class TeleopShoot extends Command {
-
-  private final Shooter shooter;
-  Timer isFinishedTimer = new Timer();
-
-  /** Creates a new TeleopShoot. */
-  public TeleopShoot(Shooter shooter) {
-    this.shooter = shooter;
+public class shootAngleAutoCmd extends Command {
+  /** Creates a new shootAngleCmd. */
+  public shootAngleAutoCmd() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //isFinishedTimer.reset();
-    System.out.println("Robot now shooting");
+    Robot.shootAndkilltheangle.set(Value.kForward);
+    Robot.melanieClimber.set(Value.kReverse);
+    System.out.println("Auto Shoot Angle Set");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shooterSpeed(1.0);
-
-    //isFinishedTimer.start();
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-    //return isFinishedTimer.get() >= 3;
+    return true;
   }
 }

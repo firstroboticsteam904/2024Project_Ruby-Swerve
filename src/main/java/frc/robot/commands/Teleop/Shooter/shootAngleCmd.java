@@ -18,6 +18,7 @@ public class shootAngleCmd extends Command {
   @Override
   public void initialize() {
     Robot.shootAndkilltheangle.set(Value.kForward);
+    Robot.melanieClimber.set(Value.kReverse);
     System.out.println("Shoot Angle Set");
   }
 

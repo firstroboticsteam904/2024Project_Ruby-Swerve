@@ -18,13 +18,15 @@ public class TeleopStop extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("Shooter now Stopped");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     shooter.shooterSpeed(0.0);
-    System.out.println("Shooter now Stopped");
+
   }
 
   // Called once the command ends or is interrupted.
