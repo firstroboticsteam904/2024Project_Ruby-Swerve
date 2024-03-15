@@ -6,6 +6,8 @@ package frc.robot;
 
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve.DriveSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -13,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Auto.Commands.DoNothing;
+import frc.robot.commands.Auto.Commands.ShootCmdGroup;
 import frc.robot.commands.Auto.Shooter.ShootAutonomous;
 import frc.robot.commands.Teleop.Climb.climbDownCmb;
 import frc.robot.commands.Teleop.Climb.climbcommand;
@@ -42,6 +46,11 @@ public class RobotContainer {
   public final CommandXboxController DriverController = new CommandXboxController(0);
   private final CommandGenericHID OperatorController = new CommandGenericHID(1);
 
+  private final Command shootAuto = new ShootCmdGroup(shoot, swerve);
+  private final Command doNothing = new DoNothing();
+
+  private final SendableChooser<Command> m_Chooser = new SendableChooser<>();
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -57,6 +66,11 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureBindings();
+
+    m_Chooser.setDefaultOption("DoNothing", shootAuto);
+    m_Chooser.addOption("Shoot Auto", doNothing);
+
+    SmartDashboard.putData(m_Chooser);
 
   }
 
@@ -97,6 +111,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ShootingCmdGroup(shoot);
+    return m_Chooser.getSelected();
   }
 }

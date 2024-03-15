@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.RobotContainer;
 import frc.robot.commands.Auto.Commands.DoNothing;
 import frc.robot.commands.Auto.Commands.ShootCmdGroup;
+import frc.robot.commands.Auto.Shooter.ShootAutonomous;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -33,10 +34,12 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   private String m_autoSelected;
-  private final SendableChooser<String> m_Chooser = new SendableChooser<>();
 
-  public static final String ShootAuto = "Auto1";
-  public static final String DoNothing = "Auto2";
+  private final Command shootAuto = new ShootAutonomous(shooter);
+  private final Command doNothing = new DoNothing();
+
+  private final SendableChooser<Command> m_Chooser = new SendableChooser<>();
+
 
   private RobotContainer m_robotContainer;
 
@@ -57,8 +60,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
 
-    m_Chooser.setDefaultOption("Shoot", ShootAuto);
-    m_Chooser.addOption("DoNothing", DoNothing);
+    //m_Chooser.setDefaultOption("Shoot", ShootAuto);
+    //m_Chooser.addOption("DoNothing", DoNothing);
 
     SmartDashboard.putData("Auto Choices", m_Chooser);
 

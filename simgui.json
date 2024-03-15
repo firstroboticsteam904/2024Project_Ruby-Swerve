@@ -2,10 +2,14 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Auto Choices": "String Chooser"
+      "/SmartDashboard/Auto Choices": "String Chooser",
+      "/SmartDashboard/SendableChooser[1]": "String Chooser"
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
     "visible": true
   }
 }

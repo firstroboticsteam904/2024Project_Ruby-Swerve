@@ -10,7 +10,7 @@ import frc.robot.subsystems.Shooter;
 
 public class ShootAutonomous extends Command {
   private final Shooter shooter;
-  private Timer shooterTimer;
+  Timer shooterTimer = new Timer();
   /** Creates a new ShootAutonomous. */
   public ShootAutonomous(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -39,10 +39,7 @@ public class ShootAutonomous extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(shooterTimer.get() > 3.0){
-      return true;
-    } else{
-      return false;
+    return shooterTimer.get() >= 3.0;
   }
 }
-}
+

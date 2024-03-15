@@ -12,16 +12,20 @@ import frc.robot.commands.Auto.Shooter.AutoStop;
 import frc.robot.commands.Auto.Shooter.ShootAutonomous;
 import frc.robot.commands.Auto.Shooter.shootAngleAutoCmd;
 import frc.robot.commands.Auto.Shooter.shootRestAngleAutoCmd;
+import frc.robot.commands.Auto.Swerve.BackUpAuto;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve.DriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootCmdGroup extends SequentialCommandGroup {
   private final Shooter shooter;
+  private final DriveSubsystem driveSubsystem;
   /** Creates a new ShootAndLift. */
-  public ShootCmdGroup(Shooter shooter) {
+  public ShootCmdGroup(Shooter shooter, DriveSubsystem driveSubsystem) {
     this.shooter = shooter;
+    this.driveSubsystem = driveSubsystem;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -31,7 +35,8 @@ public class ShootCmdGroup extends SequentialCommandGroup {
       new WaitCommand(.4),
       new AutoStop(shooter),
       new WaitCommand(.2),
-      new shootRestAngleAutoCmd()
+      new shootRestAngleAutoCmd(),
+      new BackUpAuto(driveSubsystem)
     );
   }
 }

@@ -29,7 +29,7 @@ public class TeleopShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shooterSpeed(1.0);
+    shooter.shooterSpeed(-1.0);
 
     //isFinishedTimer.start();
   }

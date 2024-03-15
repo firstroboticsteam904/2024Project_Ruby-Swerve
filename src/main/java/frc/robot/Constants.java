@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -93,6 +94,17 @@ public final class Constants {
 
     public static final double maxVelMetersPerSec = 2;
     public static final double maxAccelMetersPerSec = 1;
+    public static final double kPXController = 1.5;
+    public static final double kPYController = 1.5;
+    public static final double kPThetaController = 3;
+    public static final double kMaxAngularSpeedRadiansPerSecond = //
+    DriveConstants.rotationMotorMaxSpeedRadPerSec / 10;
+public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
+      new TrapezoidProfile.Constraints(
+          kMaxAngularSpeedRadiansPerSecond,
+          kMaxAccelerationMetersPerSecondSquared);
 
   }
 
