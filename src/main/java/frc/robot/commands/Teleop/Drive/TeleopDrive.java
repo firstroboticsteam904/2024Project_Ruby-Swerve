@@ -52,14 +52,17 @@ public class TeleopDrive extends Command {
     
     double ForwardX = xSpeedFunc.get();
     ForwardX = Math.copySign(ForwardX, ForwardX);
+    ForwardX = Math.abs(ForwardX) > OperatorConstants.Deadzone ? ForwardX : 0.0;
     ForwardX = xRateLimiter.calculate(ForwardX) * DriveConstants.maxDriveSpeedMetersPerSec;
 
     double StrafeY = ySpeedFunc.get();
     StrafeY = Math.copySign(StrafeY, StrafeY);
+    StrafeY = Math.abs(StrafeY) > OperatorConstants.Deadzone ? StrafeY : 0.0;
     StrafeY = yRateLimiter.calculate(StrafeY) * DriveConstants.maxDriveSpeedMetersPerSec;
 
     double rotationZ = rotationFunc.get();
     rotationZ = Math.copySign(rotationZ * rotationZ, rotationZ);
+    rotationZ = Math.abs(rotationZ) > OperatorConstants.Deadzone ? rotationZ : 0.0;
     rotationZ = rotationRateLimiter.calculate(rotationZ) * DriveConstants.rotationMotorMaxSpeedRadPerSec;
 
     swerveDrive.drive(

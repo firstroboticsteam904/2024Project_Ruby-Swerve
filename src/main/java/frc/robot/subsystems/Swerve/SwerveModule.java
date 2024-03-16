@@ -176,5 +176,10 @@ public class SwerveModule extends SubsystemBase {
 
   }
 
+  public void stop(){
+    driveMotor.set(0);
+    rotationMotor.set(0);
+  }
+
 
 }

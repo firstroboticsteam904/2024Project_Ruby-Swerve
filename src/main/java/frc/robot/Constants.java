@@ -72,8 +72,8 @@ public final class Constants {
 
     public static final double wheelDiameterMeters = Units.inchesToMeters(4);
 
-    public static final double rotationMotorMaxSpeedRadPerSec = 1.0;
-    public static final double rotationMotorMaxAccelRadPerSec = 1.0;
+    public static final double rotationMotorMaxSpeedRadPerSec = 1.75;
+    public static final double rotationMotorMaxAccelRadPerSec = 1.75;
 
     public static final SimpleMotorFeedforward driveFF = 
     new SimpleMotorFeedforward(0.254, 0.137);

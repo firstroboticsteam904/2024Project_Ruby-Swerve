@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANDevices;
 
@@ -18,10 +19,7 @@ public class Shooter extends SubsystemBase {
 
 
   private final CANSparkMax noteRotator = new CANSparkMax(CANDevices.RotationMotor, MotorType.kBrushless);
-
   public RelativeEncoder noteEncoder = noteRotator.getEncoder();
-
-
 
 
 
@@ -36,10 +34,16 @@ public class Shooter extends SubsystemBase {
 
   public void rotatorSpeed(double rotateSpeed){
     noteRotator.set(-rotateSpeed);
+
+    noteEncoder = noteRotator.getEncoder();
+    SmartDashboard.putNumber("CanPosition", noteEncoder.getPosition());
+    
   }
 
   public double rotatorTravel(){
+
     double rotatorTicks = noteEncoder.getPosition();
+
     return rotatorTicks;
   }
 

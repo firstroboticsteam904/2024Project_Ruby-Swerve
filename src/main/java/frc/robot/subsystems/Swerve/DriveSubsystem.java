@@ -233,6 +233,13 @@ public class DriveSubsystem extends SubsystemBase {
     pigeon.setYaw(0);
 
   }
+  
+  public void stopModules(){
+    frontLeft.stop();
+    frontRight.stop();
+    backLeft.stop();
+    backRight.stop();
+  }
 
 
 }

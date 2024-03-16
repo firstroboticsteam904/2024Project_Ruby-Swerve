@@ -63,6 +63,8 @@ public class BackUpAuto extends Command {
       RotatorController, 
       swerveDrive::setModuleStates, 
       swerveDrive);
+
+      System.out.println("Swerve Auto Movin");
   }
 
   // Called once the command ends or is interrupted.
@@ -72,6 +74,7 @@ public class BackUpAuto extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+  
+    return true;
   }
 }

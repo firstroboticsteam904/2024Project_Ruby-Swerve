@@ -6,18 +6,35 @@ package frc.robot;
 
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve.DriveSubsystem;
+
+import java.util.List;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.Auto.Commands.DoNothing;
 import frc.robot.commands.Auto.Commands.ShootCmdGroup;
 import frc.robot.commands.Auto.Shooter.ShootAutonomous;
+import frc.robot.commands.Auto.Shooter.shootRestAngleAutoCmd;
 import frc.robot.commands.Teleop.Climb.climbDownCmb;
 import frc.robot.commands.Teleop.Climb.climbcommand;
 import frc.robot.commands.Teleop.Drive.TeleopDrive;
@@ -25,6 +42,8 @@ import frc.robot.commands.Teleop.Drive.resetPigeon;
 import frc.robot.commands.Teleop.Intake.IntakeCmdGroup;
 import frc.robot.commands.Teleop.Intake.IntakeRestCmdGroup;
 import frc.robot.commands.Teleop.Intake.intakeRestPosCmd;
+import frc.robot.commands.Teleop.Shooter.AmpRestCmd;
+import frc.robot.commands.Teleop.Shooter.AmpScoringCmd;
 import frc.robot.commands.Teleop.Shooter.NoteRotatorCmd;
 import frc.robot.commands.Teleop.Shooter.RotatorStop;
 import frc.robot.commands.Teleop.Shooter.ShootingCmdGroup;
@@ -89,12 +108,14 @@ public class RobotContainer {
    OperatorController.button(6).whileTrue(new ShootingCmdGroup(shoot));
    OperatorController.axisGreaterThan(2, 0.45).whileTrue(new IntakeCmdGroup(shoot));
    OperatorController.axisGreaterThan(3, 0.45).whileTrue(new IntakeCmdGroup(shoot));
-   OperatorController.button(5).whileTrue(new NoteRotatorCmd(shoot));
+   OperatorController.button(5).onTrue(new NoteRotatorCmd(shoot, 99));
+   OperatorController.button(1).whileTrue(new AmpScoringCmd(shoot));
 
    OperatorController.button(6).whileFalse(new ShootingCmdRestGroup(shoot));
    OperatorController.axisGreaterThan(2, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
    OperatorController.axisGreaterThan(3, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
-   OperatorController.button(5).whileFalse(new RotatorStop(shoot));
+   OperatorController.button(1).whileFalse(new AmpRestCmd(shoot));
+   //OperatorController.button(5).whileFalse(new RotatorStop(shoot));
 
     //OperatorController.button(2).whileTrue(new TeleopIntake(shoot));
 
@@ -111,6 +132,39 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_Chooser.getSelected();
+    /*m_Chooser.getSelected();*/
+    final TrajectoryConfig trajectoryConfig = new TrajectoryConfig(AutoConstants.maxVelMetersPerSec
+    , AutoConstants.maxAccelMetersPerSec);
+
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
+      List.of(new Translation2d(1, 0),
+        new Translation2d(2, 0)),
+        new Pose2d(2, 0, Rotation2d.fromDegrees(0)),
+        trajectoryConfig);
+
+        PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
+        PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+        ProfiledPIDController RotatorController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, 
+        AutoConstants.kThetaControllerConstraints);
+        RotatorController.enableContinuousInput(-Math.PI, Math.PI);
+
+            SwerveControllerCommand backUpTrajectory = 
+            new SwerveControllerCommand(
+      trajectory, 
+      swerve::getPose, 
+      DriveConstants.kinematics, 
+      xController,
+      yController,
+      RotatorController, 
+      swerve::setModuleStates, 
+      swerve);
+
+      System.out.println("Swerve Auto Movin");
+
+      return new SequentialCommandGroup(
+       new InstantCommand(() -> swerve.resetPose(trajectory.getInitialPose())),
+        backUpTrajectory,
+        new InstantCommand(() -> swerve.stopModules())
+      );
   }
 }
