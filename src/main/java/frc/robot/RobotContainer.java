@@ -31,7 +31,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.Auto.Commands.BlueAmpSideAutoScore;
+import frc.robot.commands.Auto.Commands.BlueSourceSideAutoScore;
 import frc.robot.commands.Auto.Commands.DoNothing;
+import frc.robot.commands.Auto.Commands.RedAmpSideAutoScore;
+import frc.robot.commands.Auto.Commands.RedSourceSideAutoScore;
 import frc.robot.commands.Auto.Commands.ShootCmdGroup;
 import frc.robot.commands.Auto.Shooter.ShootAutonomous;
 import frc.robot.commands.Auto.Shooter.shootRestAngleAutoCmd;
@@ -67,6 +71,10 @@ public class RobotContainer {
 
   private final Command shootAuto = new ShootCmdGroup(shoot, swerve);
   private final Command doNothing = new DoNothing();
+  private final Command BlueAmp = new BlueAmpSideAutoScore(shoot, swerve);
+  private final Command BlueSource = new BlueSourceSideAutoScore(shoot, swerve);
+  private final Command RedAmp = new RedAmpSideAutoScore(shoot, swerve);
+  private final Command RedSource = new RedSourceSideAutoScore(shoot, swerve);
 
   private final SendableChooser<Command> m_Chooser = new SendableChooser<>();
 
@@ -86,8 +94,12 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    m_Chooser.setDefaultOption("DoNothing", shootAuto);
-    m_Chooser.addOption("Shoot Auto", doNothing);
+    m_Chooser.setDefaultOption("DoNothing", doNothing);
+    m_Chooser.addOption("Blue Amp", BlueAmp);
+    m_Chooser.addOption("Blue Source", BlueSource);
+    m_Chooser.addOption("Red Amp", RedAmp);
+    m_Chooser.addOption("Red Source", RedSource);
+    m_Chooser.addOption("Shoot Auto", shootAuto);
 
     SmartDashboard.putData(m_Chooser);
 
@@ -115,9 +127,6 @@ public class RobotContainer {
    OperatorController.axisGreaterThan(2, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
    OperatorController.axisGreaterThan(3, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
    OperatorController.button(1).whileFalse(new AmpRestCmd(shoot));
-   //OperatorController.button(5).whileFalse(new RotatorStop(shoot));
-
-    //OperatorController.button(2).whileTrue(new TeleopIntake(shoot));
 
     DriverController.a().onTrue(new climbcommand());
     DriverController.b().onTrue(new climbDownCmb());
@@ -132,39 +141,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    /*m_Chooser.getSelected();*/
-    final TrajectoryConfig trajectoryConfig = new TrajectoryConfig(AutoConstants.maxVelMetersPerSec
-    , AutoConstants.maxAccelMetersPerSec);
-
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
-      List.of(new Translation2d(1, 0),
-        new Translation2d(2, 0)),
-        new Pose2d(2, 0, Rotation2d.fromDegrees(0)),
-        trajectoryConfig);
-
-        PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-        PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-        ProfiledPIDController RotatorController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, 
-        AutoConstants.kThetaControllerConstraints);
-        RotatorController.enableContinuousInput(-Math.PI, Math.PI);
-
-            SwerveControllerCommand backUpTrajectory = 
-            new SwerveControllerCommand(
-      trajectory, 
-      swerve::getPose, 
-      DriveConstants.kinematics, 
-      xController,
-      yController,
-      RotatorController, 
-      swerve::setModuleStates, 
-      swerve);
-
-      System.out.println("Swerve Auto Movin");
-
-      return new SequentialCommandGroup(
-       new InstantCommand(() -> swerve.resetPose(trajectory.getInitialPose())),
-        backUpTrajectory,
-        new InstantCommand(() -> swerve.stopModules())
-      );
+    return m_Chooser.getSelected();
   }
 }

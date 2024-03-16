@@ -39,7 +39,7 @@ public class ShootAutonomous extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooterTimer.get() >= 3.0;
+    return shooterTimer.get() >= 5.0;
   }
 }
 

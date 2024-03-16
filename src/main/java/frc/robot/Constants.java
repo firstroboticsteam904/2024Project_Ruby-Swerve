@@ -92,7 +92,7 @@ public final class Constants {
 
   public static final class AutoConstants {
 
-    public static final double maxVelMetersPerSec = 2;
+    public static final double maxVelMetersPerSec = 1;
     public static final double maxAccelMetersPerSec = 1;
     public static final double kPXController = 1.5;
     public static final double kPYController = 1.5;

@@ -16,23 +16,22 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.Swerve.DriveSubsystem;
 
-public class BackUpAuto extends Command {
-  private final DriveSubsystem swerveDrive;
-  /** Creates a new BackUpAuto. */
-  public BackUpAuto(DriveSubsystem swerveDrive) {
+public class BlueSourcePath extends Command {
+  /** Creates a new BlueAmpPath. */
+  private final DriveSubsystem swerveSubSyetem;
+  public BlueSourcePath(DriveSubsystem swerveSubsystem) {
+    this.swerveSubSyetem = swerveSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    this.swerveDrive = swerveDrive;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,10 +40,11 @@ public class BackUpAuto extends Command {
     final TrajectoryConfig trajectoryConfig = new TrajectoryConfig(AutoConstants.maxVelMetersPerSec
     , AutoConstants.maxAccelMetersPerSec);
 
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
-      List.of(new Translation2d(1, 0),
-        new Translation2d(2, 0)),
-        new Pose2d(2, 1, Rotation2d.fromDegrees(180)),
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0.61, 4.01, new Rotation2d(0)),
+      List.of(
+        new Translation2d(3.32, 2.90),
+        new Translation2d(4.83, 3.63)),
+        new Pose2d(3.56, 5.01, Rotation2d.fromDegrees(170.05)),
         trajectoryConfig);
 
         PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
@@ -53,16 +53,16 @@ public class BackUpAuto extends Command {
         AutoConstants.kThetaControllerConstraints);
         RotatorController.enableContinuousInput(-Math.PI, Math.PI);
 
-            //SwerveControllerCommand backUpTrajectory = 
+            //SwerveControllerCommand blueSourceTrajectory = 
             new SwerveControllerCommand(
       trajectory, 
-      swerveDrive::getPose, 
+      swerveSubSyetem::getPose, 
       DriveConstants.kinematics, 
       xController,
       yController,
       RotatorController, 
-      swerveDrive::setModuleStates, 
-      swerveDrive);
+      swerveSubSyetem::setModuleStates, 
+      swerveSubSyetem);
 
       System.out.println("Swerve Auto Movin");
   }
@@ -74,7 +74,6 @@ public class BackUpAuto extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-  
     return true;
   }
 }

@@ -7,13 +7,12 @@ package frc.robot.commands.Auto.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.Auto.Climber.AutoLiftDown;
-import frc.robot.commands.Auto.Climber.AutoLiftUp;
 import frc.robot.commands.Auto.Shooter.AutoStop;
 import frc.robot.commands.Auto.Shooter.ShootAutonomous;
 import frc.robot.commands.Auto.Shooter.shootAngleAutoCmd;
 import frc.robot.commands.Auto.Shooter.shootRestAngleAutoCmd;
-import frc.robot.commands.Auto.Swerve.BackUpAuto;
+import frc.robot.commands.Auto.Swerve.BlueAmpPath;
+import frc.robot.commands.Auto.Swerve.RedAmpPath;
 import frc.robot.commands.Teleop.Shooter.NoteRotatorCmd;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve.DriveSubsystem;
@@ -21,28 +20,33 @@ import frc.robot.subsystems.Swerve.DriveSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootCmdGroup extends SequentialCommandGroup {
+public class RedAmpSideAutoScore extends SequentialCommandGroup {
+  /** Creates a new BlueAmpSideAutoScore. */
   private final Shooter shooter;
-  private final DriveSubsystem driveSubsystem;
-  /** Creates a new ShootAndLift. */
-  public ShootCmdGroup(Shooter shooter, DriveSubsystem driveSubsystem) {
-    this.shooter = shooter;
-    this.driveSubsystem = driveSubsystem;
+  private final DriveSubsystem swerve;
+  public RedAmpSideAutoScore(Shooter shooter, DriveSubsystem swerve) {
     // Add your commands in the addCommands() call, e.g.
+    this.shooter = shooter;
+    this.swerve = swerve;
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+
+      new RedAmpPath(swerve),
+      new WaitCommand(.6),
       new shootAngleAutoCmd(),
       new WaitCommand(.6),
       new ShootAutonomous(shooter),
       new ParallelCommandGroup(
-        new WaitCommand(0.4),
+        new WaitCommand(1.0),
         new NoteRotatorCmd(shooter, 99)
       ),
-      new WaitCommand(.4),
-      new AutoStop(shooter),
-      new WaitCommand(.2),
-      new shootRestAngleAutoCmd(),
-      new BackUpAuto(driveSubsystem)
+      new WaitCommand(.6),
+      new ParallelCommandGroup(
+        new AutoStop(shooter),
+        new shootRestAngleAutoCmd()
+      )
+
+
     );
   }
 }
