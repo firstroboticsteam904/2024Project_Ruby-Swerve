@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Shooter;
+
+import com.pathplanner.lib.commands.FollowPathCommand;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -19,7 +22,6 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.Constants.DriverStationInfo;
 import frc.robot.RobotContainer;
 import frc.robot.commands.Auto.Commands.DoNothing;
-import frc.robot.commands.Auto.Commands.ShootCmdGroup;
 import frc.robot.commands.Auto.Shooter.ShootAutonomous;
 
 /**
@@ -35,12 +37,6 @@ public class Robot extends TimedRobot {
       //public Joystick OperatorStick;
 
   private Command m_autonomousCommand;
-  private String m_autoSelected;
-
-  private final Command shootAuto = new ShootAutonomous(shooter);
-  private final Command doNothing = new DoNothing();
-
-  private final SendableChooser<Command> m_Chooser = new SendableChooser<>();
 
 
   private RobotContainer m_robotContainer;
@@ -67,8 +63,6 @@ public class Robot extends TimedRobot {
 
     //m_Chooser.setDefaultOption("Shoot", ShootAuto);
     //m_Chooser.addOption("DoNothing", DoNothing);
-
-    SmartDashboard.putData("Auto Choices", m_Chooser);
 
 
     //OperatorStick = new Joystick(2);

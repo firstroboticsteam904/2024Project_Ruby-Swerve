@@ -9,6 +9,9 @@ import frc.robot.subsystems.Swerve.DriveSubsystem;
 
 import java.util.List;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -31,12 +34,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.Auto.Commands.BlueAmpSideAutoScore;
-import frc.robot.commands.Auto.Commands.BlueSourceSideAutoScore;
+
 import frc.robot.commands.Auto.Commands.DoNothing;
-import frc.robot.commands.Auto.Commands.RedAmpSideAutoScore;
-import frc.robot.commands.Auto.Commands.RedSourceSideAutoScore;
-import frc.robot.commands.Auto.Commands.ShootCmdGroup;
+
 import frc.robot.commands.Auto.Shooter.ShootAutonomous;
 import frc.robot.commands.Auto.Shooter.shootRestAngleAutoCmd;
 import frc.robot.commands.Teleop.Climb.climbDownCmb;
@@ -69,14 +69,10 @@ public class RobotContainer {
   public final CommandXboxController DriverController = new CommandXboxController(0);
   private final CommandGenericHID OperatorController = new CommandGenericHID(1);
 
-  private final Command shootAuto = new ShootCmdGroup(shoot, swerve);
   private final Command doNothing = new DoNothing();
-  private final Command BlueAmp = new BlueAmpSideAutoScore(shoot, swerve);
-  private final Command BlueSource = new BlueSourceSideAutoScore(shoot, swerve);
-  private final Command RedAmp = new RedAmpSideAutoScore(shoot, swerve);
-  private final Command RedSource = new RedSourceSideAutoScore(shoot, swerve);
 
-  private final SendableChooser<Command> m_Chooser = new SendableChooser<>();
+
+  private final SendableChooser<Command> m_Chooser;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -91,17 +87,17 @@ public class RobotContainer {
     );
 
 
+
+
     // Configure the trigger bindings
     configureBindings();
 
-    m_Chooser.setDefaultOption("DoNothing", doNothing);
-    m_Chooser.addOption("Blue Amp", BlueAmp);
-    m_Chooser.addOption("Blue Source", BlueSource);
-    m_Chooser.addOption("Red Amp", RedAmp);
-    m_Chooser.addOption("Red Source", RedSource);
-    m_Chooser.addOption("Shoot Auto", shootAuto);
+    m_Chooser = AutoBuilder.buildAutoChooser();
 
-    SmartDashboard.putData(m_Chooser);
+    NamedCommands.registerCommand("Shooter Command Group", new ShootingCmdGroup(shoot));
+    NamedCommands.registerCommand("Shooting Rest Command Group", new ShootingCmdRestGroup(shoot));
+
+    SmartDashboard.putData("autoChooser", m_Chooser);
 
   }
 

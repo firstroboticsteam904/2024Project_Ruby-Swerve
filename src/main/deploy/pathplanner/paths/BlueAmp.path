@@ -1,0 +1,120 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.5812383527147335,
+        "y": 7.093620482842547
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.5504933860369632,
+        "y": 7.005506388904163
+      },
+      "isLocked": true,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.3233711666861363,
+        "y": 7.515270254017596
+      },
+      "prevControl": {
+        "x": 1.3233711666861363,
+        "y": 7.515270254017596
+      },
+      "nextControl": {
+        "x": 3.3233711666861327,
+        "y": 7.515270254017596
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.8379588276058914,
+        "y": 7.30084972860437
+      },
+      "prevControl": {
+        "x": 3.422127744087362,
+        "y": 7.619975908979056
+      },
+      "nextControl": {
+        "x": 4.53310547961714,
+        "y": 6.767365088688762
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.4444762904011466,
+        "y": 6.11805722301617
+      },
+      "prevControl": {
+        "x": 3.1475849461318686,
+        "y": 5.977435491870026
+      },
+      "nextControl": null,
+      "isLocked": true,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Shooting Command",
+      "waypointRelativePos": 3.0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Shooter Command Group"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 2.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Shooting Rest Command Group"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -169.93931020467696,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}
