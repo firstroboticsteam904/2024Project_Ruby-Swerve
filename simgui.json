@@ -6,8 +6,16 @@
       "/SmartDashboard/SendableChooser[1]": "String Chooser"
     }
   },
+  "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
+    "Transitory Values": {
+      "open": false
+    }
+  },
   "NetworkTables Info": {
-    "Clients": {
+    "DartClient_84458059@1": {
       "open": true
     },
     "visible": true

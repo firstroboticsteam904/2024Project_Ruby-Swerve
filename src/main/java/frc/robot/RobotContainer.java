@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -96,6 +97,9 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Shooter Command Group", new ShootingCmdGroup(shoot));
     NamedCommands.registerCommand("Shooting Rest Command Group", new ShootingCmdRestGroup(shoot));
+
+    m_Chooser.setDefaultOption("Do Nothing", doNothing);
+    m_Chooser.addOption("blue Amp", new PathPlannerAuto("BlueAmp"));
 
     SmartDashboard.putData("autoChooser", m_Chooser);
 
