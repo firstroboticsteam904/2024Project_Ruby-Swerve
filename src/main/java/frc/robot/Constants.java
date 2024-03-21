@@ -6,6 +6,10 @@ package frc.robot;
 
 import java.util.Optional;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.hal.DriverStationJNI;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -54,6 +58,10 @@ public final class Constants {
     public static final double trackWidth = Units.inchesToMeters(27.50);
     //length from front to back
     public static final double wheelBase = Units.inchesToMeters(28.25);
+
+    public static final Translation2d robotRadius = new Translation2d(
+      trackWidth / 2.0, 
+      wheelBase / 2.0);
 
     public static final SwerveDriveKinematics kinematics = 
       new SwerveDriveKinematics(
@@ -108,5 +116,13 @@ public static final double kMaxAccelerationMetersPerSecondSquared = 3;
 
     public static final double Deadzone = 0.095;
   }
+
+public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+  
+new PIDConstants(5.0, 0, 0), 
+new PIDConstants(5.0, 0, 0), 
+4.6, 
+DriveConstants.robotRadius.getNorm(), 
+new ReplanningConfig());
 
 }

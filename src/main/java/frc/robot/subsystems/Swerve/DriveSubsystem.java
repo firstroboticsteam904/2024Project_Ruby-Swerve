@@ -7,6 +7,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.DriveConstants;
 
@@ -30,6 +32,9 @@ public class DriveSubsystem extends SubsystemBase {
   private static final double frontRightAngleOffset = Units.degreesToRadians(103.53);
   private static final double backLeftAngleOffset =  Units.degreesToRadians(4.48);
   private static final double backRightAngleOffset = Units.degreesToRadians(122.96);
+
+  private SwerveDriveOdometry odometry;
+  private Field2d field;
 
 
   private final SwerveModule frontLeft = 
@@ -69,16 +74,6 @@ public class DriveSubsystem extends SubsystemBase {
 
     private final PigeonIMU pigeon = new PigeonIMU(CANDevices.pigeonID);
 
-    private final SwerveDriveOdometry odometry =
-      new SwerveDriveOdometry(
-      DriveConstants.kinematics, 
-      getHeading(), 
-      getModulePositions()
-      );
-
-      private final Field2d field;
-
-
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -94,37 +89,36 @@ public class DriveSubsystem extends SubsystemBase {
     backLeft.resetDistance();
     backRight.resetDistance();
 
+    
+    odometry =
+      new SwerveDriveOdometry(
+      DriveConstants.kinematics, 
+      getHeading(), 
+      getModulePositions()
+      );
+
     field = new Field2d();
 
     Shuffleboard.getTab("Odemetry").add(field);
 
-       AutoBuilder.configureHolonomic(
-            this::getPose, // Robot pose supplier
-            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            this::RobotRelativeDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                    1.0, // Max module speed, in m/s
-                    0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-                    new ReplanningConfig() // Default path replanning config. See the API for the options here
-            ),
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    AutoBuilder.configureHolonomic(
+      this::getPose, 
+      this::resetPose, 
+      this::getChassisSpeeds, 
+      this::RobotRelativeDrive,
+      Constants.pathFollowerConfig,
+      () -> {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+    }, 
+      this);
 
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            this // Reference to this subsystem to set requirements
-    );
+      PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
 
-
+      SmartDashboard.putData("field", field);
 
 
   }
@@ -141,6 +135,10 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Odometry Y", odometry.getPoseMeters().getY());
 
     field.setRobotPose(getPose());
+
+    double loggingState[] = {
+
+    };
 
   }
 
@@ -196,10 +194,10 @@ public class DriveSubsystem extends SubsystemBase {
   public SwerveModulePosition[] getModulePositions() {
 
     SwerveModulePosition[] positions = {
-    new SwerveModulePosition(frontLeft.getCurrentVelocityRadiansPerSecond(), frontLeft.getRelativeEncoderAngle()),
-    new SwerveModulePosition(frontRight.getCurrentVelocityRadiansPerSecond(), frontRight.getRelativeEncoderAngle()),
-    new SwerveModulePosition(backLeft.getCurrentVelocityRadiansPerSecond(), backLeft.getRelativeEncoderAngle()),
-    new SwerveModulePosition(backRight.getCurrentVelocityRadiansPerSecond(), backRight.getRelativeEncoderAngle())
+      frontLeft.getPosition(),
+      frontRight.getPosition(),
+      backLeft.getPosition(),
+      backRight.getPosition()
   };
 
   return positions;
