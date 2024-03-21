@@ -6,54 +6,28 @@ package frc.robot;
 
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve.DriveSubsystem;
-
-import java.util.List;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-
 import frc.robot.commands.Auto.Commands.DoNothing;
-
-import frc.robot.commands.Auto.Shooter.ShootAutonomous;
-import frc.robot.commands.Auto.Shooter.shootRestAngleAutoCmd;
 import frc.robot.commands.Teleop.Climb.climbDownCmb;
 import frc.robot.commands.Teleop.Climb.climbcommand;
 import frc.robot.commands.Teleop.Drive.TeleopDrive;
 import frc.robot.commands.Teleop.Drive.resetPigeon;
 import frc.robot.commands.Teleop.Intake.IntakeCmdGroup;
 import frc.robot.commands.Teleop.Intake.IntakeRestCmdGroup;
-import frc.robot.commands.Teleop.Intake.intakeRestPosCmd;
 import frc.robot.commands.Teleop.Shooter.AmpRestCmd;
 import frc.robot.commands.Teleop.Shooter.AmpScoringCmd;
 import frc.robot.commands.Teleop.Shooter.NoteRotatorCmd;
-import frc.robot.commands.Teleop.Shooter.RotatorStop;
 import frc.robot.commands.Teleop.Shooter.ShootingCmdGroup;
 import frc.robot.commands.Teleop.Shooter.ShootingCmdRestGroup;
-import frc.robot.commands.Teleop.Shooter.shootRestAngleCmd;
 
 
 /**
