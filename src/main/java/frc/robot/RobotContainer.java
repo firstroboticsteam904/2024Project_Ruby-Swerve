@@ -99,7 +99,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shooting Rest Command Group", new ShootingCmdRestGroup(shoot));
 
     m_Chooser.setDefaultOption("Do Nothing", doNothing);
-    m_Chooser.addOption("blue Amp", new PathPlannerAuto("BlueAmp"));
+    m_Chooser.addOption("blue Amp", new PathPlannerAuto("BlueAmpAuto"));
 
     SmartDashboard.putData("autoChooser", m_Chooser);
 
@@ -141,6 +141,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_Chooser.getSelected();
+    /*return m_Chooser.getSelected();*/
+    return new PathPlannerAuto("BlueAmpAuto");
   }
 }

@@ -72,14 +72,14 @@ public final class Constants {
 
     public static final double wheelDiameterMeters = Units.inchesToMeters(4);
 
-    public static final double rotationMotorMaxSpeedRadPerSec = 1.75;
-    public static final double rotationMotorMaxAccelRadPerSec = 1.75;
+    public static final double rotationMotorMaxSpeedRadPerSec = 2.0;
+    public static final double rotationMotorMaxAccelRadPerSec = 2.0;
 
     public static final SimpleMotorFeedforward driveFF = 
     new SimpleMotorFeedforward(0.254, 0.137);
 
     public static final double maxDriveSpeedMetersPerSec = Units.feetToMeters(15.1);
-    public static final double teleopTurnRateDegPerSec = 360.0;
+    public static final double teleopTurnRateDegPerSec = 720;
 
 
   }

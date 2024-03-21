@@ -105,8 +105,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     Shuffleboard.getTab("Odemetry").add(field);
 
-
-     AutoBuilder.configureHolonomic(
+         AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
@@ -114,7 +113,7 @@ public class DriveSubsystem extends SubsystemBase {
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                     new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
                     new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                    4.5, // Max module speed, in m/s
+                    1.0, // Max module speed, in m/s
                     0.4, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
             ),
@@ -131,6 +130,9 @@ public class DriveSubsystem extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
     );
+
+
+
 
   }
 
@@ -294,12 +296,6 @@ public class DriveSubsystem extends SubsystemBase {
     backLeft.stop();
     backRight.stop();
   }
-
-  static void configureHolonomic(){
-
-  }
-
   
-
 
 }
