@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Auto.Commands.DoNothing;
+import frc.robot.commands.Auto.Drive.DriveAuto;
 import frc.robot.commands.Teleop.Climb.climbDownCmb;
 import frc.robot.commands.Teleop.Climb.climbcommand;
 import frc.robot.commands.Teleop.Drive.TeleopDrive;
@@ -45,6 +46,7 @@ public class RobotContainer {
   private final CommandGenericHID OperatorController = new CommandGenericHID(1);
 
   private final Command doNothing = new DoNothing();
+  private final Command backUp = new DriveAuto(swerve, 1.0, 0, 0, false);
 
 
   private final SendableChooser<Command> m_Chooser;
@@ -73,6 +75,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shooting Rest Command Group", new ShootingCmdRestGroup(shoot));
 
     m_Chooser.setDefaultOption("Do Nothing", doNothing);
+    m_Chooser.addOption("backUp", backUp);
     m_Chooser.addOption("blue Amp", new PathPlannerAuto("BlueAmpAuto"));
 
     SmartDashboard.putData("autoChooser", m_Chooser);
@@ -105,6 +108,12 @@ public class RobotContainer {
     DriverController.a().onTrue(new climbcommand());
     DriverController.b().onTrue(new climbDownCmb());
     DriverController.x().onTrue(new resetPigeon(swerve));
+    DriverController.y().onTrue(backUp);
+    DriverController.y().onFalse( new TeleopDrive(swerve, 
+      () -> DriverController.getLeftY(), 
+      () -> DriverController.getLeftX(), 
+      () -> -DriverController.getRightX(), 
+      () -> !DriverController.leftTrigger().getAsBoolean()));
 
 
   }
@@ -115,7 +124,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    /*return m_Chooser.getSelected();*/
-    return new PathPlannerAuto("BlueAmpAuto");
+    //return m_Chooser.getSelected();
+    return backUp;
   }
 }

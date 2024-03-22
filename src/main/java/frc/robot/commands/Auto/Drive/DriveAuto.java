@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Teleop.Drive;
+package frc.robot.commands.Auto.Drive;
 
 import java.lang.module.ModuleDescriptor.Requires;
 import java.util.function.Supplier;
@@ -19,22 +19,20 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve.DriveSubsystem;
 
-public class TeleopDrive extends Command {
+public class DriveAuto extends Command {
 
   private final DriveSubsystem swerveDrive;
-  private final Supplier<Double> xSpeedFunc, ySpeedFunc, rotationFunc;
-  private final Supplier<Boolean> fieldOrientedFunc;
+  private final double xSpeedFunc, ySpeedFunc, rotationFunc;
   private final SlewRateLimiter xRateLimiter, yRateLimiter, rotationRateLimiter;
 
   /** Creates a new TeleopDrive. */
-  public TeleopDrive(DriveSubsystem swerveDrivetrain, Supplier<Double> xSpeed,
-  Supplier<Double> ySpeed, Supplier<Double> rotationSpeed, Supplier<Boolean> fieldOriented) {
+  public DriveAuto(DriveSubsystem swerveDrivetrain, double xSpeed,
+  double ySpeed, double rotationSpeed, boolean isFieldOrented) {
     // Use addRequirements() here to declare subsystem dependencies.
     swerveDrive = swerveDrivetrain;
     xSpeedFunc = xSpeed;
     ySpeedFunc = ySpeed;
     rotationFunc = rotationSpeed;
-    fieldOrientedFunc = fieldOriented;
     this.xRateLimiter = new SlewRateLimiter(3);
     this.yRateLimiter = new SlewRateLimiter(3);
     this.rotationRateLimiter = new SlewRateLimiter(3);
@@ -44,7 +42,7 @@ public class TeleopDrive extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-   
+   //swerveDrive.resetDriveDistances();
 
   }
 
@@ -54,30 +52,18 @@ public class TeleopDrive extends Command {
 
      SmartDashboard.putNumber("Distance Traveled", swerveDrive.getEncoderTicks());
     
-    double ForwardX = xSpeedFunc.get();
-    ForwardX = Math.copySign(ForwardX, ForwardX);
-    ForwardX = Math.abs(ForwardX) > OperatorConstants.Deadzone ? ForwardX : 0.0;
-    ForwardX = xRateLimiter.calculate(ForwardX) * DriveConstants.maxDriveSpeedMetersPerSec;
+    double ForwardX = xSpeedFunc;
 
-    double StrafeY = ySpeedFunc.get();
-    StrafeY = Math.copySign(StrafeY, StrafeY);
-    StrafeY = Math.abs(StrafeY) > OperatorConstants.Deadzone ? StrafeY : 0.0;
-    StrafeY = yRateLimiter.calculate(StrafeY) * DriveConstants.maxDriveSpeedMetersPerSec;
+    double StrafeY = ySpeedFunc;
 
-    double rotationZ = rotationFunc.get();
-    rotationZ = Math.copySign(rotationZ * rotationZ, rotationZ);
-    rotationZ = Math.abs(rotationZ) > OperatorConstants.Deadzone ? rotationZ : 0.0;
-    rotationZ = rotationRateLimiter.calculate(rotationZ) * DriveConstants.rotationMotorMaxSpeedRadPerSec;
+    double rotationZ = rotationFunc;
 
     swerveDrive.drive(
       -ForwardX, 
       -StrafeY, 
-      rotationZ, 
-      fieldOrientedFunc.get());
+      rotationZ, false);
 
-      if(fieldOrientedFunc.get() == false){
-      System.out.println("Robot Oriented");
-    }
+      swerveDrive.getEncoderTicks();
 
 
   }
@@ -96,6 +82,11 @@ public class TeleopDrive extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(swerveDrive.getEncoderTicks() > 65){
+      swerveDrive.resetDriveDistances();
+      return true;
+    }else{
     return false;
   }
+}
 }

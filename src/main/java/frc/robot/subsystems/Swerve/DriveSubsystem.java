@@ -286,7 +286,10 @@ public class DriveSubsystem extends SubsystemBase {
     backRight.stop();
   }
 
-
+  public double getEncoderTicks(){
+    double encoderticks = frontLeft.getEncoderTicks();
+    return encoderticks;
+  }
 
 
 }

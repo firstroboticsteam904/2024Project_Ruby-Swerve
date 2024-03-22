@@ -5,10 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Swerve.DriveSubsystem;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -24,6 +26,7 @@ import frc.robot.Constants.DriverStationInfo;
 public class Robot extends TimedRobot {
 
     public static Shooter shooter; 
+    public static DriveSubsystem swerve;
 
       //public Joystick OperatorStick;
 
@@ -54,6 +57,8 @@ public class Robot extends TimedRobot {
 
     //m_Chooser.setDefaultOption("Shoot", ShootAuto);
     //m_Chooser.addOption("DoNothing", DoNothing);
+
+   // SmartDashboard.putNumber("Distance Traveled", swerve.getEncoderTicks());
 
 
     //OperatorStick = new Joystick(2);
@@ -133,7 +138,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
   //SmartDashboard.putNumber("Rotator Encoder", shooter.rotatorTravel());
-
+//SmartDashboard.putNumber("Distance Traveled", swerve.getEncoderTicks());
   }
   
 
