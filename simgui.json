@@ -2,8 +2,37 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Odemetry/Field": "Field2d",
       "/SmartDashboard/Auto Choices": "String Chooser",
-      "/SmartDashboard/SendableChooser[1]": "String Chooser"
+      "/SmartDashboard/SendableChooser[1]": "String Chooser",
+      "/SmartDashboard/autoChooser": "String Chooser",
+      "/SmartDashboard/field": "Field2d"
+    },
+    "windows": {
+      "/Shuffleboard/Odemetry/Field": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/autoChooser": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/field": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875
+      }
     }
   },
   "NetworkTables": {
@@ -12,6 +41,13 @@
     },
     "Transitory Values": {
       "open": false
+    },
+    "transitory": {
+      "SmartDashboard": {
+        "autoChooser": {
+          "open": true
+        }
+      }
     }
   },
   "NetworkTables Info": {

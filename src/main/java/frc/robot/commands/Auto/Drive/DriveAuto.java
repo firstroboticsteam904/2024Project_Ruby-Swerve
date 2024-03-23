@@ -23,6 +23,7 @@ public class DriveAuto extends Command {
 
   private final DriveSubsystem swerveDrive;
   private final double xSpeedFunc, ySpeedFunc, rotationFunc;
+  private boolean fieldOrented;
   private final SlewRateLimiter xRateLimiter, yRateLimiter, rotationRateLimiter;
 
   /** Creates a new TeleopDrive. */
@@ -33,6 +34,7 @@ public class DriveAuto extends Command {
     xSpeedFunc = xSpeed;
     ySpeedFunc = ySpeed;
     rotationFunc = rotationSpeed;
+    fieldOrented = isFieldOrented;
     this.xRateLimiter = new SlewRateLimiter(3);
     this.yRateLimiter = new SlewRateLimiter(3);
     this.rotationRateLimiter = new SlewRateLimiter(3);
@@ -58,6 +60,7 @@ public class DriveAuto extends Command {
 
     double rotationZ = rotationFunc;
 
+    // TODO: Use isFieldOrented to reverse the X direction.
     swerveDrive.drive(
       -ForwardX, 
       -StrafeY, 
@@ -83,6 +86,8 @@ public class DriveAuto extends Command {
   @Override
   public boolean isFinished() {
     if(swerveDrive.getEncoderTicks() > 65){
+      // TODO: Use Math.abs() if X-axis can be inverted by the isFieldOrented.
+      //if(Math.abs(swerveDrive.getEncoderTicks()) > 65){
       swerveDrive.resetDriveDistances();
       return true;
     }else{

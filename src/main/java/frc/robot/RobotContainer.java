@@ -13,10 +13,12 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Auto.Commands.DoNothing;
+import frc.robot.commands.Auto.Commands.SpeakerShot;
 import frc.robot.commands.Auto.Drive.DriveAuto;
 import frc.robot.commands.Teleop.Climb.climbDownCmb;
 import frc.robot.commands.Teleop.Climb.climbcommand;
@@ -30,11 +32,13 @@ import frc.robot.commands.Teleop.Shooter.NoteRotatorCmd;
 import frc.robot.commands.Teleop.Shooter.ShootingCmdGroup;
 import frc.robot.commands.Teleop.Shooter.ShootingCmdRestGroup;
 
-
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
@@ -47,24 +51,23 @@ public class RobotContainer {
 
   private final Command doNothing = new DoNothing();
   private final Command backUp = new DriveAuto(swerve, 1.0, 0, 0, false);
-
+  
+  // Routine for shooting at speaker during autonomous.
+  private final SequentialCommandGroup scgSpeakerShot = new SpeakerShot(swerve, shoot);
 
   private final SendableChooser<Command> m_Chooser;
 
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
-      
+
     swerve.setDefaultCommand(
-      new TeleopDrive(swerve, 
-      () -> DriverController.getLeftY(), 
-      () -> DriverController.getLeftX(), 
-      () -> -DriverController.getRightX(), 
-      () -> !DriverController.leftTrigger().getAsBoolean())
-    );
-
-
-
+        new TeleopDrive(swerve,
+            () -> DriverController.getLeftY(),
+            () -> DriverController.getLeftX(),
+            () -> -DriverController.getRightX(),
+            () -> !DriverController.leftTrigger().getAsBoolean()));
 
     // Configure the trigger bindings
     configureBindings();
@@ -76,6 +79,7 @@ public class RobotContainer {
 
     m_Chooser.setDefaultOption("Do Nothing", doNothing);
     m_Chooser.addOption("backUp", backUp);
+    m_Chooser.addOption("speakerShot", scgSpeakerShot);
     m_Chooser.addOption("blue Amp", new PathPlannerAuto("BlueAmpAuto"));
 
     SmartDashboard.putData("autoChooser", m_Chooser);
@@ -83,38 +87,42 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * Use this method to define your trigger->command mappings. Triggers can be
+   * created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+   * an arbitrary
    * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+   * {@link
+   * CommandXboxController
+   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or
+   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
   private void configureBindings() {
 
-   //OperatorController.button(1).whileTrue(new ShooterCmdGroupTest(shoot));
-   OperatorController.button(6).whileTrue(new ShootingCmdGroup(shoot));
-   OperatorController.axisGreaterThan(2, 0.45).whileTrue(new IntakeCmdGroup(shoot));
-   OperatorController.axisGreaterThan(3, 0.45).whileTrue(new IntakeCmdGroup(shoot));
-   OperatorController.button(5).onTrue(new NoteRotatorCmd(shoot, 99));
-   OperatorController.button(1).whileTrue(new AmpScoringCmd(shoot));
+    // OperatorController.button(1).whileTrue(new ShooterCmdGroupTest(shoot));
+    OperatorController.button(6).whileTrue(new ShootingCmdGroup(shoot));
+    OperatorController.axisGreaterThan(2, 0.45).whileTrue(new IntakeCmdGroup(shoot));
+    OperatorController.axisGreaterThan(3, 0.45).whileTrue(new IntakeCmdGroup(shoot));
+    OperatorController.button(5).onTrue(new NoteRotatorCmd(shoot, 99));
+    OperatorController.button(1).whileTrue(new AmpScoringCmd(shoot));
 
-   OperatorController.button(6).whileFalse(new ShootingCmdRestGroup(shoot));
-   OperatorController.axisGreaterThan(2, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
-   OperatorController.axisGreaterThan(3, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
-   OperatorController.button(1).whileFalse(new AmpRestCmd(shoot));
+    OperatorController.button(6).whileFalse(new ShootingCmdRestGroup(shoot));
+    OperatorController.axisGreaterThan(2, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
+    OperatorController.axisGreaterThan(3, 0.44).whileFalse(new IntakeRestCmdGroup(shoot));
+    OperatorController.button(1).whileFalse(new AmpRestCmd(shoot));
 
     DriverController.a().onTrue(new climbcommand());
     DriverController.b().onTrue(new climbDownCmb());
     DriverController.x().onTrue(new resetPigeon(swerve));
     DriverController.y().onTrue(backUp);
-    DriverController.y().onFalse( new TeleopDrive(swerve, 
-      () -> DriverController.getLeftY(), 
-      () -> DriverController.getLeftX(), 
-      () -> -DriverController.getRightX(), 
-      () -> !DriverController.leftTrigger().getAsBoolean()));
-
+    DriverController.y().onFalse(new TeleopDrive(swerve,
+        () -> DriverController.getLeftY(),
+        () -> DriverController.getLeftX(),
+        () -> -DriverController.getRightX(),
+        () -> !DriverController.leftTrigger().getAsBoolean()));
 
   }
 
@@ -124,7 +132,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    //return m_Chooser.getSelected();
+    // return m_Chooser.getSelected();
+    // return scgSpeakerShot;
     return backUp;
   }
 }
