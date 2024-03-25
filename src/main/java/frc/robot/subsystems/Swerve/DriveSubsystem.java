@@ -9,6 +9,9 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -17,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -35,6 +39,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   private SwerveDriveOdometry odometry;
   private Field2d field;
+  public PIDController Seeza_LimelightPID = new PIDController(0.5, 0, 0.01);
+
+  private final SlewRateLimiter rotationLimiter = new SlewRateLimiter(3);
 
 
   private final SwerveModule frontLeft = 
@@ -140,6 +147,37 @@ public class DriveSubsystem extends SubsystemBase {
 
     };
 
+  }
+
+  public double limelightCenter() {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx");
+    double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    
+    double limelightControl = Seeza_LimelightPID.calculate(0, tx);
+    limelightControl = Math.copySign(limelightControl * limelightControl, limelightControl);
+    limelightControl = Math.abs(limelightControl) > 0.15 ? limelightControl : 0.0;
+    limelightControl = rotationLimiter.calculate(limelightControl) * DriveConstants.rotationMotorMaxSpeedRadPerSec;
+
+    return limelightControl;
+  }
+
+  public void limelightTracking(double forward, double strafe, double limelightRotation, boolean FieldRelative){
+    commandedForward = forward;
+    commandedStrafe = strafe;
+    limelightRotation = limelightCenter();
+
+    isCommandedFieldRelative = FieldRelative;
+
+    ChassisSpeeds speeds = 
+    FieldRelative ?
+    ChassisSpeeds.fromFieldRelativeSpeeds(forward, strafe, limelightRotation, getHeading())
+    : new ChassisSpeeds(forward, strafe, limelightRotation);
+
+    SwerveModuleState[] states = DriveConstants.kinematics.toSwerveModuleStates(speeds);
+
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.maxDriveSpeedMetersPerSec);
+
+    setModuleStates(states);
   }
 
   public void drive(double forward, double strafe, double rotation, boolean isFieldRelative) {

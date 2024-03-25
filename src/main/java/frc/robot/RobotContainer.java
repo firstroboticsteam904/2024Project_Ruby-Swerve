@@ -6,22 +6,12 @@ package frc.robot;
 
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve.DriveSubsystem;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Auto.Commands.DoNothing;
 import frc.robot.commands.Auto.Commands.SpeakerShot;
 import frc.robot.commands.Auto.Drive.DriveAuto;
 import frc.robot.commands.Teleop.Climb.climbDownCmb;
 import frc.robot.commands.Teleop.Climb.climbcommand;
+import frc.robot.commands.Teleop.Drive.LimelightTracking;
 import frc.robot.commands.Teleop.Drive.TeleopDrive;
 import frc.robot.commands.Teleop.Drive.resetPigeon;
 import frc.robot.commands.Teleop.Intake.IntakeCmdGroup;
@@ -31,6 +21,21 @@ import frc.robot.commands.Teleop.Shooter.AmpScoringCmd;
 import frc.robot.commands.Teleop.Shooter.NoteRotatorCmd;
 import frc.robot.commands.Teleop.Shooter.ShootingCmdGroup;
 import frc.robot.commands.Teleop.Shooter.ShootingCmdRestGroup;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -51,6 +56,8 @@ public class RobotContainer {
 
   private final Command doNothing = new DoNothing();
   private final Command backUp = new DriveAuto(swerve, 1.0, 0, 0, false);
+
+  private final PIDController Seeza_LimelightPID = new PIDController(0.5, 0, 0.01);
   
   // Routine for shooting at speaker during autonomous.
   private final SequentialCommandGroup scgSpeakerShot = new SpeakerShot(swerve, shoot);
@@ -83,6 +90,7 @@ public class RobotContainer {
     m_Chooser.addOption("blue Amp", new PathPlannerAuto("BlueAmpAuto"));
 
     SmartDashboard.putData("autoChooser", m_Chooser);
+
 
   }
 
@@ -117,12 +125,26 @@ public class RobotContainer {
     DriverController.a().onTrue(new climbcommand());
     DriverController.b().onTrue(new climbDownCmb());
     DriverController.x().onTrue(new resetPigeon(swerve));
+
+    DriverController.leftBumper().whileTrue(
+      new LimelightTracking(swerve, 
+      () -> DriverController.getLeftY(), 
+      () -> DriverController.getLeftX(), 
+      swerve.limelightCenter(), 
+      false)
+    );
+
+    //No longer needed, was added to test "backUp" command without
+    //constantly having to reset robot for Autonomous.
+    /*
     DriverController.y().onTrue(backUp);
     DriverController.y().onFalse(new TeleopDrive(swerve,
         () -> DriverController.getLeftY(),
         () -> DriverController.getLeftX(),
         () -> -DriverController.getRightX(),
-        () -> !DriverController.leftTrigger().getAsBoolean()));
+        () -> !DriverController.leftTrigger().getAsBoolean())
+        );
+*/
 
   }
 
@@ -132,8 +154,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // return m_Chooser.getSelected();
+    return m_Chooser.getSelected();
     // return scgSpeakerShot;
-    return backUp;
+    // return backUp;
   }
 }
