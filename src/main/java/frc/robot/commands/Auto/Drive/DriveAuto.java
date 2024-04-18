@@ -22,22 +22,16 @@ import frc.robot.subsystems.Swerve.DriveSubsystem;
 public class DriveAuto extends Command {
 
   private final DriveSubsystem swerveDrive;
-  private final double xSpeedFunc, ySpeedFunc, rotationFunc;
-  private boolean fieldOrented;
-  private final SlewRateLimiter xRateLimiter, yRateLimiter, rotationRateLimiter;
+  private final double xSpeedFunc;
+  private final SlewRateLimiter xRateLimiter;
 
   /** Creates a new TeleopDrive. */
   public DriveAuto(DriveSubsystem swerveDrivetrain, double xSpeed,
-  double ySpeed, double rotationSpeed, boolean isFieldOrented) {
+  double ySpeed, double rotationSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     swerveDrive = swerveDrivetrain;
     xSpeedFunc = xSpeed;
-    ySpeedFunc = ySpeed;
-    rotationFunc = rotationSpeed;
-    fieldOrented = isFieldOrented;
     this.xRateLimiter = new SlewRateLimiter(3);
-    this.yRateLimiter = new SlewRateLimiter(3);
-    this.rotationRateLimiter = new SlewRateLimiter(3);
     addRequirements(swerveDrivetrain);
   }
 
@@ -56,15 +50,12 @@ public class DriveAuto extends Command {
     
     double ForwardX = xSpeedFunc;
 
-    double StrafeY = ySpeedFunc;
-
-    double rotationZ = rotationFunc;
-
     // TODO: Use isFieldOrented to reverse the X direction.
     swerveDrive.drive(
-      -ForwardX, 
-      -StrafeY, 
-      rotationZ, false);
+      -ForwardX,
+      0.0,
+      0.0,
+false);
 
       swerveDrive.getEncoderTicks();
 
@@ -85,7 +76,7 @@ public class DriveAuto extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(swerveDrive.getEncoderTicks() > 65){
+    if(swerveDrive.getEncoderTicks() > 47){
       // TODO: Use Math.abs() if X-axis can be inverted by the isFieldOrented.
       //if(Math.abs(swerveDrive.getEncoderTicks()) > 65){
       swerveDrive.resetDriveDistances();

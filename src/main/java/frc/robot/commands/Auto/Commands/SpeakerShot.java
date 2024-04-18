@@ -24,7 +24,7 @@ public class SpeakerShot extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         // TODO: May need to set isFieldOrented to true for this to function.
-        new DriveAuto(swerveDrivetrain, 1.0, 0, 0, false),
+        new DriveAuto(swerveDrivetrain, 1.0, 0, 0),
         new shootAngleAutoCmd(),
         // TODO: Is this needed? Add in vision to line up the shot prior to shooting the Note.
         new WaitCommand(1),
