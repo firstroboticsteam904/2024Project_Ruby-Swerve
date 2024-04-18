@@ -88,6 +88,7 @@ public class RobotContainer {
     m_Chooser.addOption("backUp", backUp);
     m_Chooser.addOption("speakerShot", scgSpeakerShot);
     m_Chooser.addOption("blue Amp", new PathPlannerAuto("BlueAmpAuto"));
+    m_Chooser.addOption("Back&Rotate", new PathPlannerAuto("StraightBack&Rotate"));
 
     SmartDashboard.putData("autoChooser", m_Chooser);
 
