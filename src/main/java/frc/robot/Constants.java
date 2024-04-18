@@ -114,7 +114,7 @@ public static final double kMaxAccelerationMetersPerSecondSquared = 3;
 
   public static final class OperatorConstants{
 
-    public static final double Deadzone = 0.095;
+    public static final double Deadzone = 0.15;
   }
 
 public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(

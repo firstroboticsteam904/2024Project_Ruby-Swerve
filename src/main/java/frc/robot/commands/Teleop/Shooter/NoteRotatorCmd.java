@@ -31,7 +31,7 @@ public class NoteRotatorCmd extends Command {
     double rotatorSpin = shooter.rotatorTravel();
     
     if(rotatorSpin <= desiredrotatorticks){
-    shooter.rotatorSpeed(-.20);
+    shooter.rotatorSpeed(-.35);
   } else {
     shooter.rotatorSpeed(0);
   }
